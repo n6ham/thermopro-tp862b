@@ -4,20 +4,20 @@ const baseImageMarginTop = css`14%`;
 const probeImageHorizontalPosition = css`15%`;
 const probeImageWidth = css`13%`;
 
-export const thermoProTP862bStyles = css`
+export const thermoProTP86xbStyles = css`
   @font-face {
     font-family: segment7;
     src: url("/local/7segment.woff") format("woff");
   }
   
-  .thermopro-tp862b-container {
+  .thermopro-tp86xb-container {
     justify-content: center;
     align-items: center;
     width: 100%;
     display: flex;
   }
   
-  .thermopro-tp862b-card {
+  .thermopro-tp86xb-card {
     position: relative;
     justify-content: center;
     text-align: center;
@@ -30,7 +30,7 @@ export const thermoProTP862bStyles = css`
     --font-labels: 'Arial Narrow', sans-serif; /* Condensed look for labels */
   }
   
-  .thermopro-tp862b-image .probe {
+  .thermopro-tp86xb-image .probe {
     display: block;
     position: absolute;
     width: ${probeImageWidth};
@@ -39,21 +39,21 @@ export const thermoProTP862bStyles = css`
     z-index: -1;
   }
 
-  .thermopro-tp862b-image .probe.black {
+  .thermopro-tp86xb-image .probe.black {
     left: ${probeImageHorizontalPosition};
   }
 
-  .thermopro-tp862b-image .probe.white {
+  .thermopro-tp86xb-image .probe.white {
     right: ${probeImageHorizontalPosition};
   }
   
-  .thermopro-tp862b-image .base {
+  .thermopro-tp86xb-image .base {
     display: block;
     width: 100%;
     margin-top: ${baseImageMarginTop};
   }
 
-  .thermopro-tp862b-display {
+  .thermopro-tp86xb-display {
     position: absolute;
     top: 41.6%;
     left: 50%;
@@ -70,7 +70,7 @@ export const thermoProTP862bStyles = css`
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
-    text-shadow: 0.125cqw 0.125cqw 0cqw rgba(0, 0, 0, 0.1);
+    text-shadow: rgba(0, 0, 0, 0.1) 0.06cqw 0.06cqw 0cqw;
   }
   
   .unit {
@@ -152,7 +152,6 @@ export const thermoProTP862bStyles = css`
   .temp-num span {
     font-family: var(--font-digits);
     font-size: 24cqw;
-    /* Using a very tight line-height to crop empty font space */
     line-height: 1; 
   }
 `;

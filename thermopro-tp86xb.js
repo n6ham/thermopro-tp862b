@@ -4,10 +4,10 @@ import {
   css,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 
-import { thermoProTP862bStyles } from "/local/thermopro-tp862b/thermopro-tp862b-styles.js";
+import { thermoProTP86xbStyles } from "/local/thermopro-tp86xb/thermopro-tp86xb-styles.js";
 
 class ThermoProTP862b extends LitElement {
-  static styles = thermoProTP862bStyles;
+  static styles = thermoProTP86xbStyles;
 
   static get properties() {
     return {
@@ -19,23 +19,8 @@ class ThermoProTP862b extends LitElement {
   }
 
   render() {
-    return html`
-      <div class="thermopro-tp862b-container">
-        <div class="thermopro-tp862b-card">
-          <div class="thermopro-tp862b-image">
-            <img class="probe black" src="/local/thermopro-tp862b/thermopro-tp862b-b.png"/>
-            <img class="probe white" src="/local/thermopro-tp862b/thermopro-tp862b-w.png"/>
-            <img class="base" src="/local/thermopro-tp862b/thermopro-tp862b.png"/>
-          </div>
-          <div class="thermopro-tp862b-display">
-            ${this.renderDisplay(this.hass.states[this.config.entities[0]], this.hass.states[this.config.entities[1]])}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  renderDisplay(stateObj1, stateObj2) {
+    const stateObj1 = this.hass.states[this.config.entities[0]];
+    const stateObj2 = this.hass.states[this.config.entities[1]];
     if (!(stateObj1 && "attributes" in stateObj1 && stateObj1.attributes)) {
       console.error("Entity[0] state must provide attributes.\n" + stateObj1);
       return html``;
@@ -55,17 +40,29 @@ class ThermoProTP862b extends LitElement {
       attributesArr1 = stateObj2.attributes;
       attributesArr2 = stateObj1.attributes;
     }
+
     return html`
-      <div class="lcd-screen">
-        <svg class="divider" xmlns="http://www.w3.org/2000/svg">
-          <line x1="50%" y1="2%" x2="50%" y2="50%"/>
-          <circle cx="50%" cy="57%" r="7%" fill="none"/>
-          <line x1="50%" y1="64%" x2="50%" y2="98%"/>
-        </svg>
-        ${this.renderProbe(attributesArr1, "black")}
-        ${this.renderProbe(attributesArr2, "white")}
-        <div class="unit">
-          <span>°${this.display_unit}</span>
+      <div class="thermopro-tp86xb-container">
+        <div class="thermopro-tp86xb-card">
+          <div class="thermopro-tp86xb-image">
+            ${attributesArr1[`is_docked`] === 0 ? html`` : html`<img class="probe black" src="/local/thermopro-tp86xb/thermopro-tp86xb-b.png"/>`}
+            ${attributesArr2[`is_docked`] === 0 ? html`` : html`<img class="probe white" src="/local/thermopro-tp86xb/thermopro-tp86xb-w.png"/>`}
+            <img class="base" src="/local/thermopro-tp86xb/thermopro-tp86xb.png"/>
+          </div>
+          <div class="thermopro-tp86xb-display">
+            <div class="lcd-screen">
+              <svg class="divider" xmlns="http://www.w3.org/2000/svg">
+                <line x1="50%" y1="2%" x2="50%" y2="50%"/>
+                <circle cx="50%" cy="57%" r="7%" fill="none"/>
+                <line x1="50%" y1="64%" x2="50%" y2="98%"/>
+              </svg>
+              ${this.renderProbe(attributesArr1, "black")}
+              ${this.renderProbe(attributesArr2, "white")}
+              <div class="unit">
+                <span>°${this.display_unit}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -172,4 +169,4 @@ class ThermoProTP862b extends LitElement {
   }
 }
 
-customElements.define("thermopro-tp862b", ThermoProTP862b);
+customElements.define("thermopro-tp86xb", ThermoProTP862b);
