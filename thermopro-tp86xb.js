@@ -16,6 +16,7 @@ class ThermoProTP862b extends LitElement {
       config: {},
       source_unit: "C",
       display_unit: "",
+      show_decimal: false,
     };
   }
 
@@ -120,7 +121,7 @@ class ThermoProTP862b extends LitElement {
           <div class="temp-type"><span>Internal</span></div>
           <div class="temp-num">
             <span>
-              ${hasInt ? temperature_int.toFixed(1) : "---.-"}
+              ${this.formatTemperature(temperature_int, hasInt)}
             </span>
           </div>
         </div>
@@ -128,12 +129,19 @@ class ThermoProTP862b extends LitElement {
           <div class="temp-type"><span>Ambient</span></div>
           <div class="temp-num">
             <span>
-              ${hasAmb ? temperature_amb.toFixed(1) : "---.-"}
+              ${this.formatTemperature(temperature_amb, hasAmb)}
             </span>
           </div>
         </div>
       </div>
     `;
+  }
+
+  formatTemperature(temperature, isValid) {
+    if (!isValid) {
+      return this.show_decimal ? "---.-" : "---";
+    }
+    return temperature.toFixed(this.show_decimal ? 1 : 0);
   }
 
   isValidTemperature(temperature) {
@@ -189,6 +197,10 @@ class ThermoProTP862b extends LitElement {
       }
       this.display_unit = config.display_unit.toUpperCase();
     }
+    if (config.show_decimal !== undefined && typeof config.show_decimal !== "boolean") {
+      throw new Error("show_decimal must be true or false (default).");
+    }
+    this.show_decimal = config.show_decimal === true;
     this.config = config;
   }
 
