@@ -102,16 +102,34 @@ export const thermoProTP86xbStyles = css`
   .probe-display .header {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 2cqw;
     font-family: var(--font-labels);
     font-weight: bold;
-    font-size: 6cqw;
+    font-size: 5cqw;
     text-transform: uppercase;
     padding-top: 5cqw;
   }
 
   .probe-display .header span {
     transform: scaleY(1.2);
+  }
+
+  .probe-display .header .battery {
+    height: 3.6cqw;
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .battery .battery-body {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+
+  .battery .battery-cap,
+  .battery .battery-bar {
+    fill: currentColor;
   }
 
   .divider {
