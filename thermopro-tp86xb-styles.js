@@ -120,7 +120,7 @@ export const thermoProTP86xbStyles = css`
   .probe-display .header {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 2cqw;
     font-family: var(--font-labels);
     font-weight: bold;
