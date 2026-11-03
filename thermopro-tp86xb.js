@@ -108,17 +108,19 @@ class ThermoProTP862b extends LitElement {
       attributesArr[`temperature_amb_${this.source_unit}`],
       attributesArr[`is_docked`]
     );
+    const hasInt = this.isValidTemperature(temperature_int);
+    const hasAmb = this.isValidTemperature(temperature_amb);
     return html`
       <div class="probe-display">
         <div class="header">
           <span class="probe-id">probe ${color}</span>
-          ${this.renderBattery(this._probeBattery[color])}
+          ${hasInt || hasAmb ? this.renderBattery(this._probeBattery[color]) : html``}
         </div>
         <div class="temp">
           <div class="temp-type"><span>Internal</span></div>
           <div class="temp-num">
             <span>
-              ${!temperature_int || isNaN(temperature_int) ? "---.-" : temperature_int.toFixed(1)}
+              ${hasInt ? temperature_int.toFixed(1) : "---.-"}
             </span>
           </div>
         </div>
@@ -126,12 +128,16 @@ class ThermoProTP862b extends LitElement {
           <div class="temp-type"><span>Ambient</span></div>
           <div class="temp-num">
             <span>
-              ${!temperature_amb || isNaN(temperature_amb) ? "---.-" : temperature_amb.toFixed(1)}
+              ${hasAmb ? temperature_amb.toFixed(1) : "---.-"}
             </span>
           </div>
         </div>
       </div>
     `;
+  }
+
+  isValidTemperature(temperature) {
+    return !(!temperature || isNaN(temperature));
   }
 
   convertTemperature(temperature, is_docked) {
