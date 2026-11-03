@@ -3,6 +3,10 @@ import { css } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 const baseImageMarginTop = css`14%`;
 const probeImageHorizontalPosition = css`15%`;
 const probeImageWidth = css`13%`;
+// Device box = base image (560 x 874) plus the 14% top margin for the probes:
+// 560 x (874 + 0.14 * 560) = 560 x 952.4.
+const deviceAspectRatio = css`560 / 952.4`;
+const deviceWidthToHeight = css`0.588`; // 560 / 952.4
 
 export const thermoProTP86xbStyles = css`
   @font-face {
@@ -10,22 +14,36 @@ export const thermoProTP86xbStyles = css`
     src: url("/local/7segment.woff") format("woff");
   }
   
+  :host {
+    display: block;
+    height: 100%;
+  }
+
+  /*
+   * Area available for the device. In sections view the grid gives the card a
+   * fixed height, so this fills the cell. In masonry view the card height is
+   * not fixed, so the percentage height resolves to auto and aspect-ratio
+   * derives the height from the width instead.
+   */
   .thermopro-tp86xb-container {
+    display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    display: flex;
+    max-width: var(--tp86xb-max-width, 360px);
+    height: 100%;
+    margin: 0 auto;
+    aspect-ratio: ${deviceAspectRatio};
+    container-type: size;
   }
-  
+
+  /* The device: the largest box with the device's proportions that fits. */
   .thermopro-tp86xb-card {
     position: relative;
-    justify-content: center;
+    isolation: isolate; /* keep the probe images (z-index: -1) inside the card */
     text-align: center;
-    align-items: center;
-    width: 100%;
-    aspect-ratio: 1 / 1.285;
-    max-width: 568px;
-    min-width: 212px; 
+    width: min(100cqw, 100cqh * ${deviceWidthToHeight});
+    aspect-ratio: ${deviceAspectRatio};
     --font-digits: segment7, monospace;
     --font-labels: 'Arial Narrow', sans-serif; /* Condensed look for labels */
   }
@@ -96,7 +114,7 @@ export const thermoProTP86xbStyles = css`
     grid-template-columns: 100%;
     grid-template-rows: 10% 45% 45%;
     position: relative;
-    padding: 0 2cqw;
+    padding: 0 3cqw;
   }
 
   .probe-display .header {

@@ -7,7 +7,10 @@ import {
 
 import { thermoProTP86xbStyles } from "/local/thermopro-tp86xb/thermopro-tp86xb-styles.js";
 
-class ThermoProTP862b extends LitElement {
+// Default upper bound for the device width; override with the max_width option.
+const DEFAULT_MAX_WIDTH = "360px";
+
+class ThermoProTP86xb extends LitElement {
   static styles = thermoProTP86xbStyles;
 
   static get properties() {
@@ -203,24 +206,43 @@ class ThermoProTP862b extends LitElement {
       throw new Error("show_decimal must be true or false (default).");
     }
     this.show_decimal = config.show_decimal === true;
+    this.style.setProperty("--tp86xb-max-width", this.parseMaxWidth(config.max_width));
     this.config = config;
   }
 
-  // The height of your card. Home Assistant uses this to automatically
-  // distribute all cards over the available columns in masonry view
-  getCardSize() {
-    return 6;
+  // Accepts a number (pixels) or any CSS length, e.g. 400, "400px", "30vw".
+  parseMaxWidth(maxWidth) {
+    if (maxWidth === undefined || maxWidth === null) {
+      return DEFAULT_MAX_WIDTH;
+    }
+    if (typeof maxWidth === "number" && maxWidth > 0) {
+      return `${maxWidth}px`;
+    }
+    if (typeof maxWidth === "string" && CSS.supports("max-width", maxWidth)) {
+      return maxWidth;
+    }
+    throw new Error(
+      `Invalid max_width: ${maxWidth}. Use a number of pixels or a CSS length (e.g. "400px").`
+    );
   }
 
-  // The rules for sizing your card in the grid in sections view
+  // The height of the card in 50px units. Home Assistant uses this to
+  // distribute cards over the available columns in masonry view.
+  getCardSize() {
+    const height = this.offsetHeight;
+    return height > 0 ? Math.ceil(height / 50) : 13;
+  }
+
+  // The rules for sizing the card in the grid in sections view. The device is
+  // scaled to fit whatever cell size the user picks, keeping its proportions.
   getGridOptions() {
     return {
-      rows: 3,
-      min_rows: 3,
-      max_rows: 6,
-      max_columns:3
+      columns: 12,
+      rows: 9,
+      min_columns: 4,
+      min_rows: 4,
     };
   }
 }
 
-customElements.define("thermopro-tp86xb", ThermoProTP862b);
+customElements.define("thermopro-tp86xb", ThermoProTP86xb);
