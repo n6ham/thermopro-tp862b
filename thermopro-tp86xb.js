@@ -24,8 +24,8 @@ class ThermoProTP862b extends LitElement {
     super();
     // Last known probe battery level (0..3) per probe color. Messages relayed
     // by the booster don't carry the probe battery, so we keep the last value
-    // reported directly by the probe (is_probe == 1). Defaults to full.
-    this._probeBattery = { black: 3, white: 3 };
+    // reported directly by the probe (is_probe == 1).
+    this._probeBattery = { black: null, white: null };
   }
 
   render() {
@@ -90,9 +90,10 @@ class ThermoProTP862b extends LitElement {
 
   // Always rendered (hidden via opacity) so the probe label doesn't shift.
   renderBattery(level, visible) {
-    const bars = [2.5, 9, 15.5].slice(0, level);
+    const known = level !== null && level !== undefined;
+    const bars = known ? [2.5, 9, 15.5].slice(0, level) : [];
     return html`
-      <svg class="battery ${visible ? "" : "hidden"}" viewBox="0 0 26 12" xmlns="http://www.w3.org/2000/svg">
+      <svg class="battery ${visible && known ? "" : "hidden"}" viewBox="0 0 26 12" xmlns="http://www.w3.org/2000/svg">
         <rect class="battery-body" x="0.75" y="0.75" width="21.5" height="10.5" rx="1"/>
         <rect class="battery-cap" x="22.5" y="3.5" width="2.5" height="5"/>
         ${bars.map((x) => svg`<rect class="battery-bar" x="${x}" y="2.75" width="5" height="6.5"/>`)}
