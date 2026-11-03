@@ -121,6 +121,10 @@ export const thermoProTP86xbStyles = css`
     flex-shrink: 0;
   }
 
+  .probe-display .header .battery.hidden {
+    opacity: 0;
+  }
+
   .battery .battery-body {
     fill: none;
     stroke: currentColor;

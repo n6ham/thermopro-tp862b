@@ -88,10 +88,11 @@ class ThermoProTP862b extends LitElement {
     }
   }
 
-  renderBattery(level) {
+  // Always rendered (hidden via opacity) so the probe label doesn't shift.
+  renderBattery(level, visible) {
     const bars = [2.5, 9, 15.5].slice(0, level);
     return html`
-      <svg class="battery" viewBox="0 0 26 12" xmlns="http://www.w3.org/2000/svg">
+      <svg class="battery ${visible ? "" : "hidden"}" viewBox="0 0 26 12" xmlns="http://www.w3.org/2000/svg">
         <rect class="battery-body" x="0.75" y="0.75" width="21.5" height="10.5" rx="1"/>
         <rect class="battery-cap" x="22.5" y="3.5" width="2.5" height="5"/>
         ${bars.map((x) => svg`<rect class="battery-bar" x="${x}" y="2.75" width="5" height="6.5"/>`)}
@@ -115,7 +116,7 @@ class ThermoProTP862b extends LitElement {
       <div class="probe-display">
         <div class="header">
           <span class="probe-id">probe ${color}</span>
-          ${hasInt || hasAmb ? this.renderBattery(this._probeBattery[color]) : html``}
+          ${this.renderBattery(this._probeBattery[color], hasInt || hasAmb)}
         </div>
         <div class="temp">
           <div class="temp-type"><span>Internal</span></div>
